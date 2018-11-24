@@ -1,0 +1,312 @@
+<!-- <div class="container">
+  <div [hidden]="bookAdded">
+    <h3 style="margin-top : 30px">New Book Information
+      <span style="font-size : small">* required field</span>
+    </h3>
+    <form (ngSubmit)="onSubmit()">
+      <md-grid-list cols="4" rowHeight="60px">
+        <md-grid-tile [colspan]="4" [rowspan]="1">
+          <md-input-container>
+            <input mdInput id="title" type="text" required [(ngModel)]="newBook.title" name="title" placeholder="Title">
+          </md-input-container>
+        </md-grid-tile>
+      </md-grid-list>
+
+      <md-grid-list cols="4" rowHeight="60px">
+       
+        <md-grid-tile [colspan]="2" [rowspan]="1">
+          <md-input-container>
+            <input mdInput id="author" type="text" required [(ngModel)]="newBook.author" name="author" placeholder="Author">
+          </md-input-container>
+        </md-grid-tile>
+        
+        <md-grid-tile [colspan]="2" [rowspan]="1">
+          <md-input-container>
+            <input mdInput id="publisher" type="text" required [(ngModel)]="newBook.publisher" name="publisher" placeholder="Publisher">
+          </md-input-container>
+      
+        </md-grid-tile>
+      </md-grid-list>
+      <md-grid-list>
+      <md-grid-tile [colspan]="4" [rowspan]="1">
+        <md-input-container>
+          <input mdInput id="publicationDate" type="text" required [(ngModel)]="newBook.publicationDate" name="publicationDate" placeholder="PublicationDate">
+        </md-input-container>
+      </md-grid-tile>
+      </md-grid-list>
+
+      <md-grid-list cols="4" rowHeight="60px">
+       
+        <md-grid-tile [colspan]="2" [rowspan]="1">
+          <md-select placeholder = "Category" id="category" name="category" required [(ngModel)]="newBook.category">
+            <md-option value="Management">Management</md-option>
+            <md-option value="Fiction">Fiction</md-option>
+            <md-option value="Engineering">Engineering</md-option>
+            <md-option value="Programming">Programming</md-option>
+            <md-option value="Arts &amp; Literature">Arts &amp; Literature</md-option>
+          </md-select>
+        </md-grid-tile>
+        
+        <md-grid-tile [colspan]="2" [rowspan]="1">
+          <md-select placeholder = "Format" id="format" name="format" required [(ngModel)]="newBook.format">
+            <md-option value="paperback">Paperback</md-option>
+            <md-option value="hardcover">Hardcover</md-option>
+          </md-select>
+        </md-grid-tile>
+      </md-grid-list>
+
+      <md-grid-list cols="4" rowHeight="60px">
+       
+        <md-grid-tile [colspan]="2" [rowspan]="1">
+          <md-input-container>
+            <input mdInput id="pageNumber" type="number" required [(ngModel)]="newBook.numberOfPages" name="numberOfPages" step="1" placeholder="Number Of Pages">
+          </md-input-container>
+        </md-grid-tile>
+        
+        <md-grid-tile [colspan]="2" [rowspan]="1">
+          <md-input-container>
+            <input mdInput id="isbn" type="text" required [(ngModel)]="newBook.isbn" name="isbn" placeholder="ISBN">
+          </md-input-container>
+      
+        </md-grid-tile>
+      </md-grid-list>
+
+      <md-grid-list cols="4" rowHeight="60px">
+        <md-grid-tile [colspan]="2" [rowspan]="1">
+          <md-input-container>
+            <input mdInput id="listPrice" type="number" required [(ngModel)]="newBook.listPrice" name="listPrice" step="0.01" placeholder="Numbers In Stock">
+          </md-input-container>&nbsp;ounces&nbsp;
+        </md-grid-tile>
+        <md-grid-tile [colspan]="2" [rowspan]="1">
+          <md-input-container>
+            <input mdInput id="ourPrice" type="number" required [(ngModel)]="newBook.ourPrice" name="ourPrice" step="0.01" placeholder="Our Price">
+          </md-input-container>
+        </md-grid-tile>
+      </md-grid-list>
+      
+      <md-grid-list cols="4" rowHeight="60px">
+        <md-grid-tile [colspan]="2" [rowspan]="1">
+          <md-input-container>
+            <input mdInput id="shippingWeight" type="number" required [(ngModel)]="newBook.shippingWeight" name="shippingWeight" step="0.01" placeholder="List Price">
+          </md-input-container>
+        </md-grid-tile>
+        
+        <md-grid-tile [colspan]="2" [rowspan]="1">
+          <md-select placeholder = "Language" id="language" name="language" required [(ngModel)]="newBook.language">
+            <md-option value="english">English</md-option>
+            <md-option value="spanish">Spanish</md-option>
+          </md-select>
+      
+        </md-grid-tile>
+      </md-grid-list>
+
+      <md-grid-list cols="4" rowHeight="60px">
+       
+        <md-grid-tile [colspan]="2" [rowspan]="1">
+          <md-input-container>
+            <input mdInput id="inStockNumber" type="number" required [(ngModel)]="newBook.inStockNumber" name="inStockNumber" step="0.01" placeholder="Numbers In Stock">
+          </md-input-container>&nbsp;ounces&nbsp;
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="2" [rowspan]="1">
+          &nbsp;<md-slide-toggle [color]="color" [checked]="checked" [disabled]="disabled" [(ngModel)]="newBook.active" name="active">Active</md-slide-toggle>
+        </md-grid-tile>
+        
+        </md-grid-list>
+
+        <md-input-container>
+          <text-area mdInput id="description"[(ngModel)]="newBook.description" placeholder="Description" required>
+          </text-area>
+        </md-input-container>
+        Image &nbsp;
+        <input id="title" type="file" id="bookImage" name="bookImage" (change)="uploadImageService.fileChangeEvent($event)">
+  <br><br>
+
+  <md-grid-list cols="20" rowHeight="60px">
+    <md-grid-tile [colspan]="2" [rowspan]="1">
+      <md-input-container>
+        <button class="mat-primary" md-raised-button type="submit">Add Book</button>
+      </md-input-container>
+    </md-grid-tile>
+    
+    <md-grid-tile [colspan]="2" [rowspan]="1">
+      <a class="mat-warn" md-raised-button routerLink="/">Cancel</a>
+
+  
+    </md-grid-tile>
+  </md-grid-list>
+    </form>
+    <div class="row" [hidden]="!bookAdded">
+      <h3>Book added successfully</h3>
+    </div>
+  </div>
+</div> -->
+<div [hidden]="bookAdded"> 
+
+<h3 style="margin-top : 30px">New Book Information
+    <span style="font-size : small">* is a required field</span>
+  </h3>
+  <form #f="ngForm" (ngSubmit)="onSubmit()">
+     
+<div class="row">
+  <div class="col-6">
+          <div class="form-group" rowHeight="60px">
+              <input type="text" id="title" required [(ngModel)] = "newBook.title" #title="ngModel" placeholder="Title*" name="title" class="form-control">
+              <div class="alert alert-danger" *ngIf="title.touched && title.invalid">
+              Title is required
+          </div>
+          </div>
+          </div>
+          <div class="col-6">
+          <div class="form-group" col="2" rowHeight="60px">
+              <input type="text" id="author" #author="ngModel" placeholder = "Author*" required [(ngModel)]="newBook.author" name="author" class="form-control">
+              <div class="alert alert-danger" *ngIf="author.touched && author.invalid">
+              Author is required
+          </div>
+          </div>
+          </div>
+          <div class="col-6">
+              <div class="form-group" col="2" rowHeight="60px">
+                  <input type="text" #publisher="ngModel" placeholder="Publisher*" id="publisher" required [(ngModel)]="newBook.publisher" name="publisher"  class="form-control">
+                <div class="alert alert-danger" *ngIf="publisher.touched && publisher.invalid">
+              Publisher is required
+          </div>
+                </div>
+          </div>
+          <div class="col-6">
+              <div class="form-group" col="2" rowHeight="60px">
+                  <input bsDatepicker #publicationDate="ngModel" placeholder="Publication Date*" id="publicationDate" type="text" required [(ngModel)]="newBook.publicationDate" name="publicationDate"  class="form-control">
+                <div class="alert alert-danger" *ngIf="publicationDate.touched && publicationDate.invalid">
+              Publication Date is required
+          </div>
+                </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group" #category="ngModel" id="category" name="category" required [(ngModel)]="newBook.category">
+                <select  class="form-control">  
+                  <option value="" selected disabled>Category*</option>
+                    <option value="Management">Management</option>
+                    <option value="Fiction">Fiction</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Programming">Programming</option>
+                    <option value="Arts &amp; Literature">Arts &amp; Literature</option>
+                </select>
+                <div class="alert alert-danger" *ngIf="category.touched && category.invalid">
+              Category is required
+          </div>
+              </div>  
+            </div>
+            <div class="col-6">
+    <div class="form-group" #format="ngModel" id="format" name="format" required [(ngModel)]="newBook.format">
+          <select class="form-control">
+          <option value="" selected disabled>Format*</option>
+            <option value="paperback">Paperback</option>
+            <option value="hardcover">Hardcover</option>
+          </select>
+          <div class="alert alert-danger" *ngIf="format.touched && format.invalid">
+              Format is required
+          </div>
+</div>
+</div>
+
+
+<div class="col-6">
+    <div class="form-group">
+      <input  id="pageNumber" #pageNumber = "ngModel" placeholder="No of Pages*" type="number" required [(ngModel)]="newBook.numberOfPages" name="numberOfPages" step="1" class="form-control">
+    <div class="alert alert-danger" *ngIf="pageNumber.touched && pageNumber.invalid">
+          No of pages shoruld be mentioned.
+          </div>
+    </div>
+</div>
+
+<div class="col-6">
+    <div class="form-group">
+      <input id="isbn" #isbn="ngModel" placeholder="ISBN*" type="number" required [(ngModel)]="newBook.isbn" name="isbn" step="1" class="form-control">
+    <div class="alert alert-danger" *ngIf="isbn.touched && isbn.invalid">
+              ISBN is required
+          </div>
+    </div>
+</div>
+<div class="col-6">
+    <div class="form-group">
+      <input placeholder="List Price*" #listPrice = "ngModel" id="listPrice" type="number" required [(ngModel)]="newBook.listPrice" name="listPrice" step="0.01" class="form-control">
+    <div class="alert alert-danger" *ngIf="listPrice.touched && listPrice.invalid">
+              List Price is required
+          </div>
+    </div>
+</div>
+
+<div class="col-6">
+    <div class="form-group">
+      <input mdInput placeholder="Our Price*" #ourPrice="ngModel" id="ourPrice" type="number" required [(ngModel)]="newBook.ourPrice" name="ourPrice" step="0.01" class="form-control">    
+    <div class="alert alert-danger" *ngIf="ourPrice.touched && ourPrice.invalid">
+              Our Price is required
+          </div>
+    </div>
+</div>
+
+<div class="col-6">
+    <div class="form-group">
+      <input mdInput placeholder="Shipping Weight*" #shippingWeight="ngModel" id="shippingWeight" type="number" required [(ngModel)]="newBook.shippingWeight" name="shippingWeight" step="0.01" class="form-control">
+    <div class="alert alert-danger" *ngIf="shippingWeight.touched && shippingWeight.invalid">
+              Shipping Weight is required
+          </div>
+    </div>
+</div>
+
+<div class="col-6">
+    <div class="form-group" #language="ngModel" placeholder = "Language*" id="language" name="language" required [(ngModel)]="newBook.language">
+        <select class="form-control">
+          <option value="" selected disabled>Language*</option>
+          <option value="english">English</option>
+           <option value="spanish">Spanish</option>
+          </select>
+          <div class="alert alert-danger" *ngIf="language.touched && language.invalid">
+              Language is required
+          </div>
+    </div>
+
+</div>
+<div class="col-6">
+    <div class="form-group">
+      <input  placeholder="Numbers In Stock*" #inStockNumber="ngModel" id="inStockNumber" type="number" required [(ngModel)]="newBook.inStockNumber" name="inStockNumber" step="1" class="form-control">
+    <div class="alert alert-danger" *ngIf="inStockNumber.touched && inStockNumber.invalid">
+              Stock is required
+          </div>
+    </div>
+</div>
+<div class="col-6">
+<div class="form-group">
+    
+    <label class="checkbox-inline">
+        <input type="checkbox" checked data-toggle="toggle" [disabled]="disabled" [(ngModel)]="newBook.active" name="active" data-size="small">Active      
+      </label>
+</div>
+</div>
+<div class="col-6">
+  <div class="form-group">
+    <textarea class="form-control" id="description" name="description" [(ngModel)]="newBook.description" placeholder="Description*" >
+    </textarea>
+  </div>
+</div>
+<div class="col-6">
+  <div class="form-group">Image*
+      <input type="file" id="bookImage" name="bookImage" (change)="uploadImageService.fileChangeEvent($event)">
+  </div>
+</div>
+<div class="col-6">
+<div class="form-group">
+  <button class="btn btn-primary" [disabled]="f.invalid" type="submit">Add Book</button>&nbsp;
+  <button class="btn btn-danger" routerLink="/">Cancel</button>
+  </div>
+  </div>
+
+
+</div>
+
+  </form>
+  </div>
+  <div class="row" [hidden]="!bookAdded">
+    <h3>Book added successfully</h3>
+  </div>
+  <div class="col-3"></div>

@@ -1,0 +1,495 @@
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+      <h2 class="section-headline"><span>My Profile</span></h2>
+    </div>
+  <div class="col-4">
+    <img src="../../../assets/image/logo.png" class="img-responsive" style="width:400px; z-index:1;" />
+  </div>
+  <img src="../../../assets/image/wood.png" class="img-responsive right" style="position: absolute; margin-top: 70px; z-index: -2;" />
+</div>
+
+<hr style="position: absolute;width:85%; height:6px; background-color: #333; z-index: -1; margin-top: -165px;" />
+<hr />
+
+
+<div *ngIf="!dataFetched" style="margin-top: 50px;">
+  <div class="row">
+    <div id ="center" style="position:fixed;top:50%;left:50%">
+      <mat-spinner></mat-spinner>
+    </div>
+  </div>
+</div>
+<div class="row" style="margin-top: 30px">
+  <div class="col-3"></div>
+  <div class="col-9" *ngIf="dataFetched">
+    <div class="card">
+      <div style="border: none">
+        <div class="card-body" style="background-color :#333; margin-top: 20px">
+          <mat-tab-group [selectedIndex]="selectedProfileTab">
+            <mat-tab label="Edit">
+              <div style="margin-top: 20px;">
+                <div class="alert alert-danger" *ngIf="incorrectPassword" >
+                  <strong>Incorrect Password!</strong> Please Enter correct password for current user.
+                </div>
+                <div class="alert alert-success" *ngIf="updateSuccess">
+                  <strong>Changes Updated!</strong>
+                </div>
+                <form (ngSubmit)="onUpdateUserInfo()">
+                  <input type="hidden" name="id" [(ngModel)]="user.id">
+                  <div class="bg-info" style="color: azure" *ngIf="updateUserInfo">User info updated</div> 
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-6">
+                          <label for="firstName" style="color: aliceblue">First Name *</label>
+                          <input class="form-control" name="firstName" id="firstName" type="text" [(ngModel)]="user.firstName" required autofocus="autofocus">                      
+                        </div>
+                        <div class="col-6">
+                            <label for="lastName" style="color: aliceblue">Last Name *</label>
+                            <input class="form-control" name="lastName" id="lastName" type="text" [(ngModel)]="user.lastName" required autofocus="autofocus">                      
+                          </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="username" style="color: aliceblue">Username *</label>&nbsp; <span *ngIf="usernameExists" style="color: red">Username already exists. Choose different one.</span>
+                      <input class="form-control" name="username" id="username" type="text" [(ngModel)]="user.username" required autofocus="autofocus">
+                  </div>
+                  <div class="form-group">
+                      <label for="currentPassword" style="color: aliceblue">Current Password *</label>
+                        <input class="form-control" name="currentPassword" id="currentPassword" type="password" [(ngModel)]="currentPassword" autofocus="autofocus">
+                      <p style="color: #828282">Enter your current password to change E-mail address or password.</p>
+                  </div>
+                  <div class="form-group">
+                      <label for="email" style="color: aliceblue">E-mail *</label>&nbsp; <span *ngIf="emailExists" style="color: red">E-mail already exists. Choose different one.</span>
+                        <input class="form-control" name="email" id="email" type="email" [(ngModel)]="user.email" required autofocus="autofocus">
+                        <p style="color: #828282">A valid E-mail address. All the mails from the system will be sent to this address.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtNewPassword" style="color: aliceblue">New Password *</label>&nbsp; <span id="checkPasswordMatch" style="color: red"></span>
+                          <input class="form-control" name="txtNewPassword" id="txtNewPassword" type="password" [(ngModel)]="newPassword" required autofocus="autofocus">
+                      </div>
+                      <div class="form-group">
+                          <label for="txtConfirmPassword" style="color: aliceblue">Confirm New Password *</label>
+                            <input class="form-control" name="txtConfirmPassword" id="txtConfirmPassword" type="password" required autofocus="autofocus">
+                        </div>
+                      
+                  <button class="btn btn-primary" id="updateUserInfoButton" type="submit">Save</button>
+                </form>
+                </div>
+                </mat-tab>
+                <mat-tab label="Orders">
+                  <div style="margin-top: 20px;">
+                              <table class="table table-sm table-inverse">
+                                  <thead style="color:aliceblue">
+                                      <tr>
+                                          <th>Order Date</th>
+                                          <th>Order Number</th>
+                                          <th>Total</th>
+                                          <th>Status</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody style="color:aliceblue">
+                                      <tr *ngFor="let order of orderList">
+                                          <td>
+                                              <a class="pointer" (click)="onDisplayOrder(order)"><span
+                                               >{{order.orderDate}}</span></a>
+                                          </td>
+                                          <td>{{order.id}}</td>
+                                          <td>{{order.orderTotal}}</td>
+                                          <td>{{order.orderStatus}}</td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                              <div *ngIf="displayOrderDetail">
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <div class="text-center">
+                                              <h2 style="color:aliceblue">Order Detail for purchase #<span>{{order.id}}</span></h2>
+                                          </div>
+                                          <hr/>
+                                          <div class="row">
+                                              <div class="col-4">
+                                                  <div class="card" style="color:aliceblue">
+                                                      <div><strong>Billing Details</strong>
+                                                      </div>
+                                                      <div style="color:aliceblue" class="card-body">
+                                                          <span>{{order.billingAddress.billingAddressName}}</span>
+                                                          <br/>
+                                                          <span>{{order.billingAddress.billingAddressStreet1}} {{order.billingAddress.billingAddressStreet2}}</span>
+                                                          <br/>
+                                                          <span>{{order.billingAddress.billingAddressCity}}</span>
+                                                          <br/>
+                                                          <span>{{order.billingAddress.billingAddressState}}</span>
+                                                          <br/>
+                                                          <span>{{order.billingAddress.billingAddressZipcode}}</span>
+                                                          <br/>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="col-4">
+                                                  <div class="card" style="color:aliceblue">
+                                                      <div><strong>Payment Information</strong>
+                                                      </div>
+                                                      <div class="card-body">
+                                                          <span>{{order.payment.holderName}}</span>
+                                                          <br/> Visa
+                                                          <br/>
+                                                          <span>{{order.payment.cardNumber}}</span>
+                                                          <br/>
+                                                          <span>Exp Date:</span> <span>{{order.payment.expiryMonth}}</span>/<span>{{order.payment.expiryYear}}</span>
+                                                          <br/>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="col-4">
+                                                  <div class="card" style="color:aliceblue">
+                                                      <div><strong>Shipping Address</strong>
+                                                      </div>
+                                                      <div class="card-body">
+                                                          <span>{{order.shippingAddress.shippingAddressName}}</span>
+                                                          <br/>
+                                                          <span>{{order.shippingAddress.shippingAddressStreet1}}' '{{order.shippingAddress.shippingAddressStreet2}}</span>
+                                                          <br/>
+                                                          <span>{{order.shippingAddress.shippingAddressCity}}</span>
+                                                          <br/>
+                                                          <span>{{order.shippingAddress.shippingAddressState}}</span>
+                                                          <br/>
+                                                          <span>{{order.shippingAddress.shippingAddressZipcode}}</span>
+                                                          <br/>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <div class="card">
+                                              <div>
+                                                  <h3 style="color:aliceblue" class="text-center"><strong>Order summary</strong></h3>
+                                              </div>
+                                              <div class="card-body">
+                                                  <div class="table-responsive">
+                                                      <table class="table table-condensed">
+                                                          <thead style="color:aliceblue">
+                                                              <tr>
+                                                                  <td><strong>Item Name</strong></td>
+                                                                  <td class="text-center"><strong>Item Price</strong></td>
+                                                                  <td class="text-center"><strong>Item Quantity</strong>
+                                                                  </td>
+                                                                  <td class="text-right"><strong>Total</strong></td>
+                                                              </tr>
+                                                          </thead>
+                                                          <tbody style="color:aliceblue">
+                                                              <tr *ngFor="let cartItem of cartItemList">
+                                                                  <td>{{cartItem.book.title}}
+                                                                  </td>
+                                                                  <td class="text-center">{{cartItem.book.ourPrice}}
+                                                                  </td>
+                                                                  <td class="text-center">
+                                                                      {{cartItem.qty}}
+                                                                  </td>
+                                                                  <td class="text-right">{{cartItem.subTotal}}
+                                                                  </td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td class="highrow"></td>
+                                                                  <td class="highrow"></td>
+                                                                  <td class="highrow text-center">
+                                                                      <strong>Subtotal</strong></td>
+                                                                  <td class="highrow text-right">{{order.orderTotal}}
+                                                                  </td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td class="emptyrow"></td>
+                                                                  <td class="emptyrow"></td>
+                                                                  <td class="emptyrow text-center"><strong>Tax</strong>
+                                                                  </td>
+                                                                  <td class="emptyrow text-right">{{order.orderTotal*0.06}}
+                                                                  </td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td class="emptyrow"><i class="fa fa-barcode iconbig"></i></td>
+                                                                  <td class="emptyrow"></td>
+                                                                  <td class="emptyrow text-center"><strong>Total</strong>
+                                                                  </td>
+                                                                  <td class="emptyrow text-right">{{order.orderTotal*1.06}}
+                                                                  </td>
+                                                              </tr>
+                                                          </tbody>
+                                                      </table>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          
+                      </div>
+              </mat-tab>
+
+                <mat-tab label="Payment">
+                  <br><br>
+                  <p *ngIf="defaultPaymentSet" style="color : azure">Default Payment Successful!</p>
+                  <mat-tab-group (selectedIndexChange)="selectedBillingChange($event)" [selectedIndex] = "selectedBillingTab">
+                    <mat-tab label="List of Credit Cards">
+                      <form (ngSubmit)="setDefaultPayment()" method="POST">
+                        <table class="table">
+                          <thead>
+                            <tr style="color: aliceblue;">
+                              <th>Default</th>
+                              <th>Credit Card</th>
+                              <th>Operatios</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let userPayment of userPaymentList">
+                              <td>
+                                <input type="radio" name="defaultUserPaymentId" [(ngModel)]="defaultUserPaymentId" [value]="userPayment.id">
+                                <span style="color : aliceblue">default</span>
+                              </td>
+                              <td style="color : aliceblue">{{ userPayment.cardName }}</td>
+                              <td >
+                                <button class="btn btn-info" (click)="onUpdatePayment(userPayment)">Update</button>&nbsp;
+                                <button class="btn btn-danger" (click)="onRemovePayment(userPayment.id)">Remove</button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                      </form>
+                    </mat-tab>
+                    <mat-tab label="Add/Update Credit Card">
+                      <form (ngSubmit)="onNewPayment()" method="POST">
+                        <div class="bg-info" style="color : azure" *ngIf="updateUserPaymentInfo">User info updated.</div>
+                        <input hidden = "hidden" name="id" [(ngModel)]="userPayment.id">
+                        
+                        
+                        <div class="form-group">
+                          <h5 style="color :aliceblue;">*Give a name for your card:</h5>
+                          <input type="text" class="form-control" name="cardName" id="cardName" [(ngModel)]="userPayment.cardName" required>
+                        </div>
+                        <hr style="color :azure"/>
+
+                        <!-- Billing Address -->
+                        <div class="form-group">
+                          <label style="color :aliceblue;" for="billingName">Name</label>
+                          <input class="form-control" type="text" name="userBillingName" id="billingName" placeholder="Receiver Name" [(ngModel)]="userBilling.userBillingName" required>
+                        </div>
+                        <div class="form-group">
+                            <label style="color :aliceblue;" for="billingAddress">Street Address</label>
+                            <input class="form-control" type="text" name="userBillingStreet1" id="billingAddress" placeholder="Street Address1" [(ngModel)]="userBilling.userBillingStreet1" required>
+                          </div>
+                          <div class="form-group">
+                              <input class="form-control" type="text" name="userBillingStreet2" placeholder="Street Address2" [(ngModel)]="userBilling.userBillingStreet2">
+                            </div>
+                          <div class="row">
+                            <div class="col-4">
+                              <div class="form-group">
+                                  <label style="color :aliceblue;" for="billingCity">City *</label>
+                                  <input class="form-control" type="text" name="userBillingCity" id="billingCity" placeholder="Your Billing City" [(ngModel)]="userBilling.userBillingCity" required>
+                              </div>
+                            </div>
+                              <div class="col-4">
+                                  <div class="form-group">
+                                      <label style="color :aliceblue;" for="billingState">State *</label>
+                                      <select class="form-control" name="userBillingState" id="billingState" [(ngModel)]="userBilling.userBillingState" required>
+                                        <option value="" disabled>--State--</option>
+                                        <option *ngFor="let state of stateList">{{state}}</option>
+                                      </select>
+                                  </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label style="color :aliceblue;" for="billingZipcode">Zipcode *</label>
+                                    <input class="form-control" type="text" name="userBillingZipcode" id="billingZipcode" placeholder="Your Zipcode" [(ngModel)]="userBilling.userBillingZipcode" required>
+                                </div>
+                              </div>
+                          </div>
+
+                          <hr style="color :azure"/>
+                          <!----User Payment---->
+
+                          <div class="form-group">
+                            <h4 style="color:azure">Credit Card Information</h4>
+                          </div>
+                          <div class="row">
+                            <div class="col-12">
+                              <img src="../../assets/image/creditcard.png" class="img-responsive">
+                              <br>
+                              <div class="form-group">
+                                  <label style="color :aliceblue;" for="cardType">Card Type *</label>
+                                  <select class="form-control" name="cardType" id="cardType" [(ngModel)]="userPayment.type" required>
+                                    <option value="" disabled>--Card Type--</option>
+                                    <option value="visa">Visa</option>
+                                    <option value="mastercard">Master Card</option>
+                                    <option value="discover">Discover</option>
+                                    <option value="amex">American Express</option>
+                                    <option value="rupay">Rupay</option>
+                                  </select>
+                              </div>
+                              <div class="form-group">
+                                  <label style="color :aliceblue;" for="cardHolder">Card Holder *</label>
+                                  <input class="form-control" type="text" name="cardHolder" id="cardHolder" placeholder="Card Holder Name" [(ngModel)]="userPayment.holderName" required>
+                              </div>
+                              <div class="form-group">
+                                  <label style="color :aliceblue;" for="cardNumber">Card Number *</label>
+                                  <div class="input-group">
+                                      <input class="form-control" type="tel" name="cardNumber" id="cardNumber" placeholder="Valid Card Number" [(ngModel)]="userPayment.cardNumber" required>
+                                      <span class="input-group-addon"><i class="fa-fa-credit-card"></i></span>
+                                  </div>
+                              </div>
+                            </div>
+
+                          </div>
+                          <div class="row">
+                            <div class="col-7">
+                              <div class="form-group">
+                                <label for="expiryDate" style="color : aliceblue">Expiration Date *</label>
+                                <div class="row">
+                                  <div class="col-6">
+                                      <select class="form-control" name="expiryMonth" id="expiryMonth" [(ngModel)]="userPayment.expiryMonth" required>
+                                          <option value="" disabled>--Expiry Month--</option>
+                                          <option value="1">Jan (01)</option>
+                                          <option value="2">Feb (02)</option>
+                                          <option value="3">Mar (03)</option>
+                                          <option value="4">Apr (04)</option>
+                                          <option value="5">May (05)</option>
+                                          <option value="6">Jun (06)</option>
+                                          <option value="7">Jul (07)</option>
+                                          <option value="8">Aug (08)</option>
+                                          <option value="9">Sep (09)</option>
+                                          <option value="10">Oct (10)</option>
+                                          <option value="11">Nov (11)</option>
+                                          <option value="12">Dec (12)</option>
+                                          </select>
+                                  </div>
+                                  <div class="col-6">
+                                      <select class="form-control" name="expiryYear" id="expiryYear" [(ngModel)]="userPayment.expiryYear" required>
+                                          <option value="" disabled>--Expiry Year--</option>
+                                          <option value="18">2018</option>
+                                          <option value="19">2019</option>
+                                          <option value="20">2020</option>
+                                          <option value="21">2021</option>
+                                          <option value="22">2022</option>
+                                          <option value="23">2023</option>
+                                          <option value="24">2024</option>
+                                          <option value="25">2025</option>
+                                          <option value="26">2026</option>
+                                          <option value="27">2027</option>
+                                          <option value="28">2028</option>
+                                          <option value="29">2029</option>
+                                          </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-5">
+                              <div class="form-group pull-right">
+                                <label for="cardCvv" style="color: aliceblue">Cvv *</label>
+                                <input class="form-control" type="tel" name="cardCvv" id="cardCvv" [(ngModel)]="userPayment.cvv" placeholder ="Enter Card Cvv number">
+                              </div>
+                            </div>
+                          </div>
+                          <hr style="color :azure">
+                          <div class="form-group">
+                              <button class="btn btn-primary" type="submit">Save All</button>
+                          </div>
+                          
+
+
+                      </form>
+                    </mat-tab>
+                  </mat-tab-group>
+                </mat-tab>
+                <mat-tab label="Shipping">
+                  <br><br>
+                  <p *ngIf="defaultShipping" style="color : azure">Default Shipping Successful!</p>
+                  <mat-tab-group (selectedIndexChange)="selectedShippingChange($event)" [selectedIndex] = "selectedShippingTab">
+                    <mat-tab label="List of Shipping Addressess">
+                      <form (ngSubmit)="setDefaultShipping()" method="POST">
+                        <table class="table">
+                          <thead>
+                            <tr style="color: aliceblue;">
+                              <th>Default</th>
+                              <th>Shipping Address</th>
+                              <th>Operatios</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let userShipping of userShippingList">
+                              <td>
+                                <input type="radio" name="defaultUserShippingId" [(ngModel)]="defaultUserShippingId" [value]="userShipping.id">
+                                <span style="color : aliceblue">default</span>
+                              </td>
+                              <td style="color : aliceblue">{{ userShipping.userShippingStreet1 }}, {{ userShipping.userShippingStreet2}}, {{userShipping.userShippingCity}}, {{userShipping.userShippingState }}</td>
+                              <td >
+                                <button class="btn btn-info" (click)="onUpdateShipping(userShipping)">Update</button>&nbsp;
+                                <button class="btn btn-danger" (click)="onRemoveShipping(userShipping.id)">Remove</button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                      </form>
+                    </mat-tab>
+                    <mat-tab label="Add/Update Shipping Address">
+                      <form (ngSubmit)="onNewShipping()" method="POST">
+                        <div class="bg-info" style="color : azure" *ngIf="updateUserShippingInfo">Shipping info updated.</div>
+                        <input hidden = "hidden" name="id" [(ngModel)]="userShipping.id">
+                        <div class="form-group">
+                          <label style="color :aliceblue;" for="shippingName">Name *</label>
+                          <input type="text" class="form-control" name="shippingName" id="shippingName" placeholder="Receivers Name" [(ngModel)]="userShipping.userShippingName" required>
+                        </div>
+                        <hr style="color :azure"/>
+
+                        <!-- Billing Address -->
+                        
+                        <div class="form-group">
+                            <label style="color :aliceblue;" for="shippingAddress">Street Address *</label>
+                            <input class="form-control" type="text" name="userShippingStreet1" id="shippingAddress" placeholder="Street Address1" [(ngModel)]="userShipping.userShippingStreet1" required>
+                          </div>
+                          <div class="form-group">
+                              <input class="form-control" type="text" name="userShippingStreet2" placeholder="Street Address2" [(ngModel)]="userShipping.userShippingStreet2">
+                            </div>
+                          <div class="row">
+                            <div class="col-4">
+                              <div class="form-group">
+                                  <label style="color :aliceblue;" for="shippingCity">City *</label>
+                                  <input class="form-control" type="text" name="userShippingCity" id="userShippingCity" placeholder="Your Shipping City" [(ngModel)]="userShipping.userShippingCity" required>
+                              </div>
+                            </div>
+                              <div class="col-4">
+                                  <div class="form-group">
+                                      <label style="color :aliceblue;" for="shippingState">State *</label>
+                                      <select class="form-control" name="userShippingState" id="shippingState" [(ngModel)]="userShipping.userShippingState" required>
+                                        <option value="" disabled>--State--</option>
+                                        <option *ngFor="let state of stateList">{{state}}</option>
+                                      </select>
+                                  </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label style="color :aliceblue;" for="shippingZipcode">Zipcode *</label>
+                                    <input class="form-control" type="text" name="userShippingZipcode" id="shippingZipcode" placeholder="Your Zipcode" [(ngModel)]="userShipping.userShippingZipcode" required>
+                                </div>
+                              </div>
+                            </div>
+                          <hr style="color :azure">
+                          <div class="form-group">
+                              <button class="btn btn-primary" type="submit">Save</button>
+                          </div>
+                          
+
+
+                      </form>
+                    </mat-tab>
+                  </mat-tab-group>
+                </mat-tab>
+                </mat-tab-group>
+                </div>
+                </div>
+                </div>
+</div>
+</div>
+</div>

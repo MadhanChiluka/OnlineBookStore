@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand pointer" routerLink="">MADHAN'S BOOKSTORE</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="nav navbar-nav navbar-left">
+      <li class="nav-item active">
+        <a class="nav-link" routerLinkActive="active" routerLink="/bookList">Book <span class="sr-only">(current)</span></a>
+      </li>
+        <form (ngSubmit)="onSearchByTitle()" class="form-inline my-2 my-lg-0">
+          <div class="form-group">
+            <input type="text" name="searchByTitle" class="form-control" placeholder="Book Title" [(ngModel)]="keyboard">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>          </div>
+        </form>
+      </ul>
+  </div>
+  <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+    <ul class="nav navbar-nav navbar-right ">
+          <li class="nav-item active" *ngIf="!isLoggedIn">
+              <a class="nav-link" routerLink="/myAccount">My Account</a>
+            </li>
+      <li class="nav-item active" *ngIf="isLoggedIn">
+          <a class="nav-link" routerLink="/shoppingCart">Shopping Cart</a>
+      </li>
+    
+      <li class="nav-item active" *ngIf="isLoggedIn">
+          <a class="nav-link" routerLink="/myProfile">My Profile</a>
+      </li>
+      <li class="nav-item active" *ngIf="isLoggedIn">
+          <a class="nav-link" style="cursor : pointer" (click)="logout()">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>

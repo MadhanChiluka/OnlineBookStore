@@ -1,0 +1,6 @@
+.nav.navbar-nav.navbar-right {
+    float: right !important;
+}
+.navbar {
+    position: sticky top;
+}
